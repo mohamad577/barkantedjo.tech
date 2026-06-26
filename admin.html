@@ -72,10 +72,9 @@
 
     <div class="admin-container">
         <h1>Panneau de Contrôle Secret 🤫</h1>
-        <p>Ajoute ou supprime les vidéos du Multivers de Barkantedjo</p>
+        <p>Ajoute ou supprime les vidéos du Multivers de Barkantedjo (Synchronisé sur le Cloud)</p>
         <hr style="border-color: #343a40; margin: 20px 0;">
 
-        <!-- FORMULAIRE SÉCURISÉ ET CORRIGÉ SANS LE REQUIS PAR DÉFAUT -->
         <form id="form-add-video">
             <div class="form-group">
                 <label for="video-title">Titre du contenu (Obligatoire) :</label>
@@ -83,7 +82,6 @@
             </div>
             <div class="form-group">
                 <label id="label-url" for="video-url">Lien de la vidéo (Obligatoire pour les Vidéos) :</label>
-                <!-- L'attribut required a été totalement enlevé d'ici pour éviter le blocage visible sur l'image -->
                 <input type="url" id="video-url" placeholder="https://www.instagram.com/reel/...">
             </div>
             <div class="form-group">
@@ -106,57 +104,74 @@
                     <option value="kaw-iya">Kaw Iya</option>
                 </select>
             </div>
-            <button type="submit" class="btn-admin-add">🚀 Mettre en ligne sur le site</button>
+            <button type="submit" class="btn-admin-add">🚀 Mettre en ligne sur le Cloud</button>
         </form>
 
         <div class="admin-video-list">
-            <h2>🗑️ Gestion des éléments en ligne</h2>
-            <div id="admin-videos-container"></div>
+            <h2>🗑️ Gestion des éléments en ligne (Firebase)</h2>
+            <div id="admin-videos-container">Chargement...</div>
         </div>
 
         <p style="margin-top: 30px;"><a href="index.html" style="color: #f1c40f; text-decoration: none;">← Retourner voir le site public</a></p>
     </div>
 
+    <!-- Scripts de connexion Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <script>
+        // Ta configuration d'après Annotation 2026-06-26 020958.jpg
+        const firebaseConfig = {
+            apiKey: "AIzaSyB0TB4AspYqwN9Mcp-e5f8CisHacjksJEM",
+            authDomain: "barkantedjo.firebaseapp.com",
+            projectId: "barkantedjo",
+            storageBucket: "barkantedjo.firebasestorage.app",
+            messagingSenderId: "1344409658",
+            appId: "1:1344409658:web:d01eb6f283eeae1ee92583"
+        };
+
+        // Initialisation de Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         function verifierMotDePasse() {
             let mdp = prompt("Entrez le mot de passe secret de Barkantedjo :");
             if (mdp === "barkan2026") {
                 alert("Accès autorisé ! Bienvenue Chef 👑");
                 document.querySelector('.admin-container').style.display = 'block';
-                afficherElementsAdmin();
+                ecouterChangementsFirebase();
             } else {
                 alert("Mot de passe incorrect ❌ Accès refusé !");
                 window.location.href = "index.html";
             }
         }
 
-        function obtenirContenus() {
-            return JSON.parse(localStorage.getItem('multiversContenus')) || [];
-        }
+        function ecouterChangementsFirebase() {
+            db.collection("contenus").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+                const conteneur = document.getElementById('admin-videos-container');
+                conteneur.innerHTML = '';
 
-        function afficherElementsAdmin() {
-            const conteneur = document.getElementById('admin-videos-container');
-            const contenus = obtenirContenus();
-            conteneur.innerHTML = '';
+                if (snapshot.empty) {
+                    conteneur.innerHTML = '<p style="color: #777;">Aucun contenu sur le cloud Firebase.</p>';
+                    return;
+                }
 
-            if (contenus.length === 0) {
-                conteneur.innerHTML = '<p style="color: #777;">Aucun contenu en ligne pour le moment.</p>';
-                return;
-            }
-
-            contenus.forEach((item, index) => {
-                const typeEmoji = item.type === 'story' ? '🔥 Story' : '🎥 Vidéo';
-                const div = document.createElement('div');
-                div.className = 'admin-video-item';
-                div.innerHTML = `
-                    <span><strong>[${typeEmoji}]</strong> ${item.title}</span>
-                    <button class="btn-delete" onclick="supprimerContenu(${index})">Supprimer 🗑️</button>
-                `;
-                conteneur.appendChild(div);
+                snapshot.forEach((doc) => {
+                    const item = doc.data();
+                    const id = doc.id;
+                    const typeEmoji = item.type === 'story' ? '🔥 Story' : '🎥 Vidéo';
+                    
+                    const div = document.createElement('div');
+                    div.className = 'admin-video-item';
+                    div.innerHTML = `
+                        <span><strong>[${typeEmoji}]</strong> ${item.title}</span>
+                        <button class="btn-delete" onclick="supprimerContenu('${id}')">Supprimer 🗑️</button>
+                    `;
+                    conteneur.appendChild(div);
+                });
             });
         }
 
-        // Gestionnaire visuel des champs
         document.getElementById('content-type').addEventListener('change', function() {
             const groupStory = document.getElementById('group-story-image');
             const labelUrl = document.getElementById('label-url');
@@ -179,9 +194,8 @@
             const type = document.getElementById('content-type').value;
             const storyImage = document.getElementById('story-image-url').value;
 
-            // VERIFICATION JAVASCRIPT MANUELLE : On bloque uniquement si c'est une vidéo classique et qu'il n'y a pas de lien
             if (type === 'video' && !url) {
-                alert("Veuillez renseigner le champ 'Lien de la vidéo' car c'est obligatoire pour une vidéo classique !");
+                alert("Le lien est obligatoire pour une vidéo !");
                 return;
             }
 
@@ -192,26 +206,31 @@
 
             const imageFinale = (type === 'story' && storyImage) ? storyImage : image;
 
-            const nouveauxContenus = obtenirContenus();
-            nouveauxContenus.push({ title, url, image: imageFinale, type });
-
-            localStorage.setItem('multiversContenus', JSON.stringify(nouveauxContenus));
-            
-            // Réinitialisation propre
-            document.getElementById('form-add-video').reset();
-            document.getElementById('group-story-image').style.display = 'none';
-            document.getElementById('label-url').innerText = "Lien de la vidéo (Obligatoire pour les Vidéos) :";
-            
-            afficherElementsAdmin();
-            alert("Propulsé en ligne avec succès ! 🚀");
+            // Envoi en temps réel sur Firebase !
+            db.collection("contenus").add({
+                title: title,
+                url: url || "",
+                image: imageFinale,
+                type: type,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                document.getElementById('form-add-video').reset();
+                document.getElementById('group-story-image').style.display = 'none';
+                document.getElementById('label-url').innerText = "Lien de la vidéo (Obligatoire pour les Vidéos) :";
+                alert("Propulsé mondialement sur le Cloud Firebase ! 🚀");
+            })
+            .catch((error) => {
+                alert("Erreur lors de la publication : " + error);
+            });
         });
 
-        function supprimerContenu(index) {
-            if (confirm("Tu veux vraiment supprimer ce contenu ?")) {
-                const contenus = obtenirContenus();
-                contenus.splice(index, 1);
-                localStorage.setItem('multiversContenus', JSON.stringify(contenus));
-                afficherElementsAdmin();
+        function supprimerContenu(id) {
+            if (confirm("Tu veux vraiment supprimer ce contenu du Cloud ?")) {
+                db.collection("contenus").doc(id).delete()
+                .then(() => {
+                    alert("Supprimé avec succès !");
+                });
             }
         }
 
