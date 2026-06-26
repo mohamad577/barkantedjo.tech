@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Admin | Gestion Barkantedjo</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #1e272e;
+            border-radius: 15px;
+            border: 1px solid #343a40;
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            color: #f1c40f;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #343a40;
+            background-color: #0f141c;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        .btn-admin-add {
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        .admin-video-list {
+            margin-top: 40px;
+            text-align: left;
+        }
+        .admin-video-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0f141c;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #343a40;
+        }
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="background-color: #0f141c; color: white; font-family: sans-serif; text-align: center;">
+
+    <div class="admin-container">
+        <h1>Panneau de Contrôle Secret 🤫</h1>
+        <p>Ajoute ou supprime les vidéos du Multivers de Barkantedjo</p>
+        <hr style="border-color: #343a40; margin: 20px 0;">
+
+        <!-- FORMULAIRE SÉCURISÉ ET CORRIGÉ SANS LE REQUIS PAR DÉFAUT -->
+        <form id="form-add-video">
+            <div class="form-group">
+                <label for="video-title">Titre du contenu (Obligatoire) :</label>
+                <input type="text" id="video-title" placeholder="Ex: Annonce ou titre du clip..." required>
+            </div>
+            <div class="form-group">
+                <label id="label-url" for="video-url">Lien de la vidéo (Obligatoire pour les Vidéos) :</label>
+                <!-- L'attribut required a été totalement enlevé d'ici pour éviter le blocage visible sur l'image -->
+                <input type="url" id="video-url" placeholder="https://www.instagram.com/reel/...">
+            </div>
+            <div class="form-group">
+                <label for="content-type">Type de contenu :</label>
+                <select id="content-type">
+                    <option value="video">🎥 Vidéo classique (Grille)</option>
+                    <option value="story">🔥 Story éphémère (Bande du haut)</option>
+                </select>
+            </div>
+            <div class="form-group" id="group-story-image" style="display: none;">
+                <label for="story-image-url">Lien d'une image de couverture internet (Optionnel) :</label>
+                <input type="url" id="story-image-url" placeholder="https://exemple.com/image.jpg">
+            </div>
+            <div class="form-group">
+                <label for="video-character">Personnage principal vedette :</label>
+                <select id="video-character">
+                    <option value="petel">Ba Petel</option>
+                    <option value="bachirou">Bachirou</option>
+                    <option value="babanguida">Babanguida</option>
+                    <option value="kaw-iya">Kaw Iya</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-admin-add">🚀 Mettre en ligne sur le site</button>
+        </form>
+
+        <div class="admin-video-list">
+            <h2>🗑️ Gestion des éléments en ligne</h2>
+            <div id="admin-videos-container"></div>
+        </div>
+
+        <p style="margin-top: 30px;"><a href="index.html" style="color: #f1c40f; text-decoration: none;">← Retourner voir le site public</a></p>
+    </div>
+
+    <script>
+        function verifierMotDePasse() {
+            let mdp = prompt("Entrez le mot de passe secret de Barkantedjo :");
+            if (mdp === "barkan2026") {
+                alert("Accès autorisé ! Bienvenue Chef 👑");
+                document.querySelector('.admin-container').style.display = 'block';
+                afficherElementsAdmin();
+            } else {
+                alert("Mot de passe incorrect ❌ Accès refusé !");
+                window.location.href = "index.html";
+            }
+        }
+
+        function obtenirContenus() {
+            return JSON.parse(localStorage.getItem('multiversContenus')) || [];
+        }
+
+        function afficherElementsAdmin() {
+            const conteneur = document.getElementById('admin-videos-container');
+            const contenus = obtenirContenus();
+            conteneur.innerHTML = '';
+
+            if (contenus.length === 0) {
+                conteneur.innerHTML = '<p style="color: #777;">Aucun contenu en ligne pour le moment.</p>';
+                return;
+            }
+
+            contenus.forEach((item, index) => {
+                const typeEmoji = item.type === 'story' ? '🔥 Story' : '🎥 Vidéo';
+                const div = document.createElement('div');
+                div.className = 'admin-video-item';
+                div.innerHTML = `
+                    <span><strong>[${typeEmoji}]</strong> ${item.title}</span>
+                    <button class="btn-delete" onclick="supprimerContenu(${index})">Supprimer 🗑️</button>
+                `;
+                conteneur.appendChild(div);
+            });
+        }
+
+        // Gestionnaire visuel des champs
+        document.getElementById('content-type').addEventListener('change', function() {
+            const groupStory = document.getElementById('group-story-image');
+            const labelUrl = document.getElementById('label-url');
+
+            if (this.value === 'story') {
+                groupStory.style.display = 'block';
+                labelUrl.innerText = "Lien de la vidéo (Optionnel pour les Stories) :";
+            } else {
+                groupStory.style.display = 'none';
+                labelUrl.innerText = "Lien de la vidéo (Obligatoire pour les Vidéos) :";
+            }
+        });
+
+        document.getElementById('form-add-video').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('video-title').value;
+            const url = document.getElementById('video-url').value;
+            const character = document.getElementById('video-character').value;
+            const type = document.getElementById('content-type').value;
+            const storyImage = document.getElementById('story-image-url').value;
+
+            // VERIFICATION JAVASCRIPT MANUELLE : On bloque uniquement si c'est une vidéo classique et qu'il n'y a pas de lien
+            if (type === 'video' && !url) {
+                alert("Veuillez renseigner le champ 'Lien de la vidéo' car c'est obligatoire pour une vidéo classique !");
+                return;
+            }
+
+            let image = 'bachirou.jpg';
+            if (character === 'petel') image = 'ba petel.jpg';
+            if (character === 'babanguida') image = 'babanguida.jpg';
+            if (character === 'kaw-iya') image = 'kaw iya.jpg';
+
+            const imageFinale = (type === 'story' && storyImage) ? storyImage : image;
+
+            const nouveauxContenus = obtenirContenus();
+            nouveauxContenus.push({ title, url, image: imageFinale, type });
+
+            localStorage.setItem('multiversContenus', JSON.stringify(nouveauxContenus));
+            
+            // Réinitialisation propre
+            document.getElementById('form-add-video').reset();
+            document.getElementById('group-story-image').style.display = 'none';
+            document.getElementById('label-url').innerText = "Lien de la vidéo (Obligatoire pour les Vidéos) :";
+            
+            afficherElementsAdmin();
+            alert("Propulsé en ligne avec succès ! 🚀");
+        });
+
+        function supprimerContenu(index) {
+            if (confirm("Tu veux vraiment supprimer ce contenu ?")) {
+                const contenus = obtenirContenus();
+                contenus.splice(index, 1);
+                localStorage.setItem('multiversContenus', JSON.stringify(contenus));
+                afficherElementsAdmin();
+            }
+        }
+
+        window.onload = verifierMotDePasse;
+    </script>
+</body>
+</html>

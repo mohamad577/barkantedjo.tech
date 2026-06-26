@@ -1,0 +1,353 @@
+/* RESET COMPLET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #121920; /* Bleu-gris ultra sombre */
+    color: #f4f6f8;
+    line-height: 1.6;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background-color: #1a242f;
+    border-bottom: 2px solid #d4af37;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #d4af37;
+}
+
+header nav a {
+    color: #f4f6f8;
+    text-decoration: none;
+    margin-left: 15px;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+header nav .btn-nav {
+    background-color: #d4af37;
+    color: #121920;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* HERO SECTION */
+.hero {
+    padding: 60px 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+}
+
+.hero-text h1 {
+    font-size: 36px;
+    color: #f4f6f8;
+    margin-bottom: 15px;
+}
+
+.hero-text p {
+    font-size: 16px;
+    color: #a0b2c6;
+    margin-bottom: 25px;
+}
+
+.btn-main {
+    display: inline-block;
+    background: linear-gradient(45deg, #d4af37, #e67e22);
+    color: #121920;
+    text-decoration: none;
+    padding: 12px 24px;
+    font-weight: bold;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+}
+
+.hero-img img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 50%; /* Transforme la photo principale en magnifique cercle */
+    border: 4px solid #d4af37;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* STORIES SECTION */
+.stories-section {
+    padding: 40px 5%;
+    background-color: #1a242f;
+    text-align: center;
+}
+
+.stories-section h2 {
+    color: #d4af37;
+    margin-bottom: 20px;
+}
+
+.stories-container {
+    display: flex;
+    justify-content: center;
+}
+
+.story-card {
+    background-color: #121920;
+    padding: 20px;
+    border-radius: 15px;
+    border-left: 4px solid #e67e22;
+    max-width: 500px;
+}
+
+.story-status {
+    display: inline-block;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* MULTIVERS / BATTLE SECTION */
+.multivers-section {
+    padding: 60px 5%;
+    text-align: center;
+}
+
+.multivers-section h2 {
+    color: #d4af37;
+    font-size: 28px;
+}
+
+.subtitle {
+    color: #a0b2c6;
+    margin-bottom: 40px;
+}
+
+.grid-personnages {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+}
+
+.card-perso {
+    background-color: #1a242f;
+    padding: 20px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 320px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border: 1px solid #2c3e50;
+    transition: transform 0.2s;
+}
+
+.card-perso:hover {
+    transform: scale(1.03);
+}
+
+.card-perso img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50%; /* Rond parfait pour les visages des captures */
+    border: 3px solid #e67e22;
+    margin-bottom: 15px;
+}
+
+.card-perso h3 {
+    margin-bottom: 8px;
+    color: #f4f6f8;
+}
+
+.card-perso {
+    background-color: #1e272e;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    border: 1px solid #343a40;
+    
+    /* MODIFICATIONS POUR ÉVITER LE BUG : */
+    height: auto; /* Laisse la carte s'agrandir selon le texte */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Style pour la ligne du compteur de votes */
+.vote-count {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #f1c40f;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.btn-vote {
+    background-color: transparent;
+    border: 2px solid #d4af37;
+    color: #d4af37;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-vote:hover {
+    background-color: #d4af37;
+    color: #121920;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+    padding: 60px 5%;
+    background-color: #1a242f;
+    text-align: center;
+}
+
+.contact-section h2 {
+    color: #d4af37;
+    margin-bottom: 15px;
+}
+
+.contact-section p {
+    color: #a0b2c6;
+    margin-bottom: 25px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-whatsapp {
+    display: inline-block;
+    background-color: #25d366; /* Vert WhatsApp officiel */
+    color: white;
+    text-decoration: none;
+    padding: 14px 28px;
+    font-weight: bold;
+    border-radius: 30px;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+}
+
+/* FOOTER */
+footer {
+    background-color: #121920;
+    padding: 30px 5%;
+    text-align: center;
+    font-size: 13px;
+    color: #7f8c8d;
+    border-top: 1px solid #2c3e50;
+}
+
+.dev-credit {
+    margin-top: 10px;
+    color: #a0b2c6;
+}
+
+.dev-credit a {
+    color: #d4af37;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* MEDIA QUERIES POUR ORDINATEUR (RESPONSIVE) */
+@media (min-width: 768px) {
+    .hero {
+        flex-direction: row;
+        text-align: left;
+        padding: 80px 10%;
+    }
+    .hero-text h1 { font-size: 48px; }
+    .hero-img img { width: 380px; height: 380px; }
+    .grid-personnages {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+/* --- SECTION VIDÉOS --- */
+.videos-section {
+    padding: 60px 20px;
+    background-color: #0f141c; /* Un fond un peu plus sombre pour détacher */
+    text-align: center;
+}
+
+.grid-videos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 40px auto 0 auto;
+}
+
+.card-video {
+    background-color: #1e272e;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #343a40;
+    transition: transform 0.3s ease;
+}
+
+.card-video:hover {
+    transform: translateY(-5px);
+}
+
+.video-placeholder {
+    position: relative;
+    width: 100%;
+    height: 400px; /* Format vertical allongé style smartphone */
+    background-color: #000;
+}
+
+.video-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Zoom parfait sur l'image */
+    opacity: 0.8;
+}
+
+.play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(241, 196, 15, 0.9); /* Jaune comme ton thème */
+    color: #fff;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.card-video h3 {
+    font-size: 1.1rem;
+    color: #fff;
+    padding: 15px;
+    margin: 0;
+    text-align: left;
+}

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barkantedjo Officiel | Le Multivers de la Comédie</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Styles pour la fenêtre modale du lecteur vidéo intégré */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .video-modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 0px 20px rgba(241, 196, 15, 0.3);
+        }
+        @media (max-width: 768px) {
+            .video-modal-content {
+                aspect-ratio: 9/16;
+                max-width: 380px;
+            }
+        }
+        .video-modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* GROS BOUTON ROUGE POUR FERMER */
+        .btn-fermer-modal {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background 0.2s;
+        }
+        .btn-fermer-modal:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Barkantedjo.tech</div>
+        <nav>
+            <a href="#accueil">Accueil</a>
+            <a href="#videos">Mes Vidéos</a>
+            <a href="#multivers">Le Multivers</a>
+            <a href="#contact" class="btn-nav">Partenariat</a>
+        </nav>
+    </header>
+
+    <section id="accueil" class="hero">
+        <div class="hero-text">
+            <h1>Le Roi des Visages et des Voix</h1>
+            <p>Découvrez l'univers unique de Barkantedjo. Suivez ses concepts exclusifs et collaborez avec l'un des meilleurs créateurs.</p>
+            <a href="#contact" class="btn-main">Demander une Publicité 📈</a>
+        </div>
+        <div class="hero-img">
+            <img src="barkantedjo.jpg" alt="Barkantedjo Principal">
+        </div>
+    </section>
+
+    <section id="stories" class="stories-section">
+        <h2>🔥 Les Stories du Jour</h2>
+        <div class="stories-container">
+            <div class="story-card active">
+                <div class="story-status">EN DIRECT</div>
+                <p>Nouveau concept vidéo en préparation pour ce soir... Restez branchés ! 🤫</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="multivers" class="multivers-section">
+        <h2>👑 La Battle des Personnages</h2>
+        <p class="subtitle">Votez pour votre visage préféré de Barkantedjo !</p>
+        
+        <div class="grid-personnages">
+            <!-- Personnage 1 : Ba Petel -->
+            <div class="card-perso">
+                <img src="ba petel.jpg" alt="Ba Petel">
+                <h3>Ba Petel</h3>
+                <p>Le fils de Kaw Iya, tout droit venu de Guider. Un esprit un peu particulier et une naïveté légendaire qui apporte toujours une bonne dose de folie !</p>
+                <div class="vote-count">👑 <span id="count-petel">0</span> Couronnes</div>
+                <button class="btn-vote" onclick="voter('petel')">👑 Donner une Couronne</button>
+            </div>
+
+            <!-- Personnage 2 : Bachirou -->
+            <div class="card-perso">
+                <img src="bachirou.jpg" alt="Bachirou">
+                <h3>Bachirou</h3>
+                <p>Le deuxième fils de Kaw Iya. Très intelligent mais complètement immature. Habitué au luxe grâce à sa mère qui bosse à la BEAC, il a un mal fou à s'adapter à la vie modeste de son père !</p>
+                <div class="vote-count">👑 <span id="count-bachirou">0</span> Couronnes</div>
+                <button class="btn-vote" onclick="voter('bachirou')">👑 Donner une Couronne</button>
+            </div>
+
+            <!-- Personnage 3 : Babanguida -->
+            <div class="card-perso">
+                <img src="babanguida.jpg" alt="Babanguida">
+                <h3>Babanguida</h3>
+                <p>Le tailleur officiel et la vraie terreur de la maison ! Capable de changer l'humeur de toute la famille en un instant, il impose ses règles et arrache tout ce qu'on refuse de lui donner.</p>
+                <div class="vote-count">👑 <span id="count-babanguida">0</span> Couronnes</div>
+                <button class="btn-vote" onclick="voter('babanguida')">👑 Donner une Couronne</button>
+            </div>
+
+            <!-- Personnage 4 : Kaw Iya -->
+            <div class="card-perso">
+                <img src="kaw iya.jpg" alt="Kaw Iya">
+                <h3>Kaw Iya</h3>
+                <p>Le pilier de la famille ! Connu pour ses vannes légendaires et ses insultes qui font pleurer de rire les spectateurs. Son plus grand rêve ? Voir enfin Babanguida souffrir ou lui donner une bonne correction !</p>
+                <div class="vote-count">👑 <span id="count-kaw-iya">0</span> Couronnes</div>
+                <button class="btn-vote" onclick="voter('kaw-iya')">👑 Donner une Couronne</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="videos" class="videos-section">
+        <h2>🎥 Mes Vidéos</h2>
+        <p class="subtitle">Retrouvez les derniers clips et stories du Multivers</p>
+        <div class="grid-videos" id="container-videos"></div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <h2>📈 Boostez Votre Visibilité</h2>
+        <p>Vous êtes une marque ou un commerçant ? Demandez une publicité exclusive dans les prochaines vidéos de Barkantedjo.</p>
+        <a href="https://wa.me/237656583637?text=Bonjour%20Barkantedjo,%20je%20souhaite%20demander%20une%20publicite%20sur%20votre%20site." target="_blank" class="btn-whatsapp">
+            Discuter sur WhatsApp Pro 💬
+        </a>
+    </section>
+
+    <!-- LECTEUR VIDÉO INTÉGRÉ MODIFIÉ -->
+    <div id="videoModal" class="video-modal">
+        <!-- GROS BOUTON DE FERMETURE BIEN VISIBLE -->
+        <button class="btn-fermer-modal" onclick="fermerLecteur()">❌ Fermer et retourner au site</button>
+        <div class="video-modal-content">
+            <iframe id="videoPlayer" src="" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Barkantedjo Officiel. Tous droits réservés.</p>
+        <p class="dev-credit">Besoin d'un site web pro ou d'une application comme Naïhab ? <a href="https://wa.me/237693163954?text=Bonjour,%20je%20souhaite%20avoir%20des%20informations%20pour%20la%20creation%20d'un%20site%20web" target="_blank">Contactez le Développeur ⚡</a></p>
+    </footer>
+
+    <script>
+        function formaterLienIntegation(url) {
+            if (!url) return '';
+            if (url.includes('instagram.com/reel/') || url.includes('instagram.com/p/')) {
+                let cleanUrl = url.split('?')[0];
+                if (!cleanUrl.endsWith('/')) cleanUrl += '/';
+                return cleanUrl + 'embed';
+            }
+            if (url.includes('youtube.com/watch?v=')) {
+                let videoId = url.split('v=')[1].split('&')[0];
+                return 'https://www.youtube.com/embed/' + videoId;
+            }
+            if (url.includes('youtu.be/')) {
+                let videoId = url.split('youtu.be/')[1].split('?')[0];
+                return 'https://www.youtube.com/embed/' + videoId;
+            }
+            return url;
+        }
+
+        function ouvrirLecteur(url) {
+            if (!url) {
+                alert("Cette story n'a pas de lien vidéo, c'est juste une annonce ! 😉");
+                return;
+            }
+            const embedUrl = formaterLienIntegation(url);
+            document.getElementById('videoPlayer').src = embedUrl;
+            document.getElementById('videoModal').style.display = 'flex';
+        }
+
+        function fermerLecteur() {
+            document.getElementById('videoModal').style.display = 'none';
+            document.getElementById('videoPlayer').src = '';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const contenus = JSON.parse(localStorage.getItem('multiversContenus')) || [];
+            const conteneurVideos = document.getElementById('container-videos');
+            const conteneurStories = document.querySelector('.stories-container');
+
+            conteneurVideos.innerHTML = '';
+            conteneurStories.innerHTML = '';
+
+            let aDesStories = false;
+            let aDesVideos = false;
+
+            contenus.forEach(item => {
+                if (item.type === 'video') {
+                    aDesVideos = true;
+                    const card = document.createElement('div');
+                    card.className = 'card-video';
+                    card.style.cursor = 'pointer';
+                    card.onclick = () => ouvrirLecteur(item.url);
+                    card.innerHTML = `
+                        <div class="video-placeholder">
+                            <img src="${item.image}" alt="Miniature">
+                            <div class="play-icon">▶</div>
+                        </div>
+                        <h3>${item.title}</h3>
+                    `;
+                    conteneurVideos.appendChild(card);
+                } else if (item.type === 'story') {
+                    aDesStories = true;
+                    const cardStory = document.createElement('div');
+                    cardStory.className = 'story-card active';
+                    cardStory.style.cursor = 'pointer';
+                    cardStory.onclick = () => ouvrirLecteur(item.url);
+                    
+                    if (item.image && (item.image.startsWith('http') || item.image.includes('.'))) {
+                        cardStory.style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('${item.image}')`;
+                        cardStory.style.backgroundSize = 'cover';
+                        cardStory.style.backgroundPosition = 'center';
+                    }
+
+                    cardStory.innerHTML = `
+                        <div style="height: 100%; position: relative; padding: 15px; box-sizing: border-box;">
+                            <div class="story-status" style="display:inline-block; background: #e74c3c; font-size: 10px; padding: 2px 5px; border-radius: 3px; font-weight:bold; margin-bottom:5px;">EN DIRECT</div>
+                            <p style="margin: 0; font-size: 13px; font-weight: bold; text-shadow: 1px 1px 3px black;">${item.title}</p>
+                        </div>
+                    `;
+                    conteneurStories.appendChild(cardStory);
+                }
+            });
+
+            if (!aDesVideos) {
+                conteneurVideos.innerHTML = '<p style="color: #777; grid-column: 1/-1;">Aucune vidéo disponible pour le moment. Allez dans l\'espace Admin !</p>';
+            }
+            if (!aDesStories) {
+                conteneurStories.innerHTML = '<div class="story-card"><p>Aucune story active aujourd\'hui. 😉</p></div>';
+            }
+        });
+
+        function chargerVotes() {
+            const votes = JSON.parse(localStorage.getItem('votesMultivers')) || { petel: 0, bachirou: 0, babanguida: 0, 'kaw-iya': 0 };
+            if(document.getElementById('count-petel')) document.getElementById('count-petel').innerText = votes.petel;
+            if(document.getElementById('count-bachirou')) document.getElementById('count-bachirou').innerText = votes.bachirou;
+            if(document.getElementById('count-babanguida')) document.getElementById('count-babanguida').innerText = votes.babanguida;
+            if(document.getElementById('count-kaw-iya')) document.getElementById('count-kaw-iya').innerText = votes['kaw-iya'] || 0;
+        }
+
+        function voter(personnage) {
+            const votes = JSON.parse(localStorage.getItem('votesMultivers')) || { petel: 0, bachirou: 0, babanguida: 0, 'kaw-iya': 0 };
+            votes[personnage] = (votes[personnage] || 0) + 1;
+            localStorage.setItem('votesMultivers', JSON.stringify(votes));
+            document.getElementById(`count-${personnage}`).innerText = votes[personnage];
+            alert("👑 Une couronne de plus pour " + personnage.toUpperCase() + " !");
+        }
+
+        window.addEventListener('DOMContentLoaded', chargerVotes);
+    </script>
+</body>
+</html>
